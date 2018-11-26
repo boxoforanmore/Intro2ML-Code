@@ -37,4 +37,5 @@ clf = update_model(db_path=db, model=clf, batch_size=10000)
 
 # Comment below code if you do not want changes to classifier to be permanent
 
-pickle.dump(clf, open(os.path.join(cur_dir, 'pkl_objects', 'classifier.pkl'), 'wb'), protocol=4)
+# The below code should be uncommented once a better validator is added to validate SQL entries to make sure they are decent
+## pickle.dump(clf, open(os.path.join(cur_dir, 'pkl_objects', 'classifier.pkl'), 'wb'), protocol=4)
