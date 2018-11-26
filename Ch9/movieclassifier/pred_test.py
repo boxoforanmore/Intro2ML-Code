@@ -20,8 +20,27 @@ print(f"Text: {example}")
 print('Prediction: %s\nProbability: %.2f%%' % (label[clf.predict(X)[0]], np.max(clf.predict_proba(X))*100))
 print()
 
+
 # Should be negative
 example = ['I thought this movie was horrendously terrible']
+X = vect.transform(example)
+
+print(f"Text: {example}")
+print('Prediction: %s\nProbability: %.2f%%' % (label[clf.predict(X)[0]], np.max(clf.predict_proba(X))*100))
+print()
+
+
+# Probably negative--an inbetween example
+example = ['I thought this movie was really just okay']
+X = vect.transform(example)
+
+print(f"Text: {example}")
+print('Prediction: %s\nProbability: %.2f%%' % (label[clf.predict(X)[0]], np.max(clf.predict_proba(X))*100))
+print()
+
+
+# Trying to be confusing
+example = ['Great acting :), terrible screenplay :(']
 X = vect.transform(example)
 
 print(f"Text: {example}")
