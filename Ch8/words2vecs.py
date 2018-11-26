@@ -1,3 +1,5 @@
+# NOT Google's word2vec implementation
+
 import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 
