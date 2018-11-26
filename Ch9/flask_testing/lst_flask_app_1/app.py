@@ -10,8 +10,8 @@ class HelloForm(Form):
 # Main page method
 @app.route('/')
 def index():
-    form = HellowForm(request.form)
-    return render_template('first_app.html')
+    form = HelloForm(request.form)
+    return render_template('first_app.html', form=form)
 
 # Hello page method
 @app.route('/hello', methods=['POST'])

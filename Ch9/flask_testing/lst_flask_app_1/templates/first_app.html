@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!doctype html>
 <html>
   <head>
     <title>First app</title>
@@ -9,7 +9,7 @@
     <div>What's your name?</div>
     <form method=post action="/hello">
       <dl>
-        {{ render_field(form.sayhello) }}
+      {{ render_field(form.sayhello) }}
       </dl>
       <input type=submit value='Say Hello' name='submit_btn'>
     </form>
