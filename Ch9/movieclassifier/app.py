@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from wtforms import Form, TextAreaField, validators
+from update import update_model
 import pickle
 import sqlite3
 import os
@@ -75,4 +76,6 @@ def feedback():
 
 
 if __name__ == '__main__':
+    # Have update code delete rows from db after retraining?
+    clf = update_model(db_path=db, model=clf, batch_size=10000)
     app.run()
