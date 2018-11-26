@@ -21,7 +21,7 @@ db = os.path.join(cur_dir, 'reviews.sqlite')
 def classify(document):
     label = {0: 'negative', 1: 'positive'}
     X = vect.transform([document])
-    clf.predict(X)[0]
+    y = clf.predict(X)[0]
     proba = np.max(clf.predict_proba(X))
     return label[y], proba
 
@@ -59,7 +59,7 @@ def results():
         return render_template('results.html', content=review, prediction=y, probability=round(proba*100, 2))
     return render_template('reviewform.html', form=form)
 
-@app.route('/feedback', methods=['POST'])
+@app.route('/thanks', methods=['POST'])
 def feedback():
     feedback = request.form['feedback_button']
     review = request.form['review']
@@ -75,4 +75,4 @@ def feedback():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
