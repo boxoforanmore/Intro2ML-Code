@@ -132,3 +132,35 @@ print()
 print('Slope: %.3f' % lr.w_[1])
 print()
 print('Intercept: %.3f' % lr.w_[0])
+
+
+# Estimating coefficient of a regression model via sklearn
+# Sklearn tends to use LIBLINEAR libraries for vectorized optimation algorithms
+from sklearn.linear_model import LinearRegression
+slr = LinearRegression()
+slr.fit(X, y)
+print('Slope: %.3f' % slr.coef_[0])
+print()
+print('Intercept: %.3f' % slr.intercept_)
+print()
+print()
+
+
+lin_regplot(X, y, slr)
+plt.xlabel('Average number of rooms [RM]')
+plt.ylabel('Price in $1000s [MEDV]')
+plt.show()
+
+
+# Closed form solution without ML library
+# adding a column vector of 'ones'
+Xb = np.hstack((np.ones((X.shape[0], 1))m X))
+w = np.zeros(X.shape[1])
+z = np.linalg.inv(np.dot(Xb.T, Xb))
+w = np.dot(z, np.dot(Xb.T, y))
+
+print()
+print('Slope: %.3f' % w[1])
+print()
+print('Intercept: %.3f' % w[0])
+print()
