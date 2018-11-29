@@ -239,3 +239,36 @@ print()
 print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred),
                                        mean_squared_error(y_test, t_test_pred))
 print()
+
+
+# Coefficient of determination (Standardized MSE)
+from sklearn.metrics import r2_score
+
+print()
+print('R^2 trian: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred),
+                                       r2_score(y_test, y_test_pred)))
+print()
+
+
+# Ridge regularization model initialization (reg strength must be initialized)
+from sklearn.linear_model import Ridge
+ridge = Ridge(alpha=1.0)
+
+
+# LASSO initialization (reg strength must be initialized)
+from  sklearn.linear_model import Lasso
+lasso = Lasso(alpha=1.0)
+
+
+# ElasticNet initialization (allows playing with L1/L2 ratio)
+from sklearn.linear_model import ElasticNet
+
+# l1_ratio of 1 will make the regressor equal to LASSO
+elanet = ElasticNet(alpha=1.0, l1_ratio=0.5)
+
+
+
+
+
+
+
