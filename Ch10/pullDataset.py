@@ -105,3 +105,18 @@ lin_regplot(X_std, y_std, lr)
 plt.xlabel(str(col_2_desc['RM'] + ' [RM] (standardized)'))
 plt.ylabel(str(col_2_desc['MEDV'] + ' [MEDV] (standardized)'))
 plt.show()
+
+
+
+# Scaling the predicted price outcome back to the original scale
+# with the inverse transform method of StandardScaler
+## This checks the price of a house with 5 rooms
+num_rooms_std = sc_x.transform([5.0])
+price_std = lr.predict(num_rooms_std)
+print()
+print("Price in $1000s: %.3f" % sc_y.inverse_transform(price_std))
+print()
+
+
+
+
