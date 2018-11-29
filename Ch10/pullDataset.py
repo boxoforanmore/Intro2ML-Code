@@ -111,12 +111,24 @@ plt.show()
 # Scaling the predicted price outcome back to the original scale
 # with the inverse transform method of StandardScaler
 ## This checks the price of a house with 5 rooms
-num_rooms_std = sc_x.transform([5.0])
+
+
+### The book has errata here
+num_rooms_std = sc_x.transform(np.array(5.0).reshape(1,-1))
 price_std = lr.predict(num_rooms_std)
 print()
-print("Price in $1000s: %.3f" % sc_y.inverse_transform(price_std))
+print("Price in $1000s for 5 room house: %.3f" % sc_y.inverse_transform(price_std))
+print()
+
+num_rooms_std = sc_x.transform(np.array(100.0).reshape(1, -1))
+price_std = lr.predict(num_rooms_std)
+print()
+print("Price in $1000s for 100 room house: %.3f" % sc_y.inverse_transform(price_std))
 print()
 
 
-
-
+## The weights of the intercept do not need to be updated with standrdized variables
+print()
+print('Slope: %.3f' % lr.w_[1])
+print()
+print('Intercept: %.3f' % lr.w_[0])
