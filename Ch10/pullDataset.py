@@ -164,3 +164,78 @@ print('Slope: %.3f' % w[1])
 print()
 print('Intercept: %.3f' % w[0])
 print()
+
+
+# Using RANSAC for a more robust algorithm
+# Looks at inliers instead of throwing out outliers
+from sklearn.linear_model import RANSACRegressor
+
+# Set max iterations to 100, minimum number of random samples to 50
+# Residual threshold--only allows samples to be included in inliers
+# if their veritical distance is less than or equal to 5 distance units
+ransac = RANSACRegressor(LinearRegression(), max_trials=100,
+                         min_samples=50, loss='absolute_loss',
+                         residual_threshold=5.0,
+                         random_state=0)
+
+ransac.fit(X, y)
+
+
+# Plot the linear fit of ransac
+inlier_mask = ransac.inlier_mask_
+outlier_mask = np.logical_not(inlier_mask)
+line_X = np.arange(3, 10, 1)
+line_y_ransac = ransac.predict(line_X[:, np.newaxis])
+
+plt.scatter(X[inlier_mask], y[inlier_mask], c='steelblue', edgecolor='white',
+            marker='o', laberl='Inliers')
+
+plt.scatter(X[outlier_masl], y[outlier_mask], c='limegreen', edgecolor='white',
+            marker='s', label='Outliers')
+
+plt.plot(line_X, line_y_ransac, color='black', lw=2)
+plt.xlabel('Average number of rooms [RM]')
+plt.ylabel('Price in $1000s [MEDV]')
+plt.legend(loc='upper left')
+plt.show()
+
+
+print()
+print('Ransac Slope: %.3f' % ransac.estimator_.coef_[0])
+print()
+print('Ransac Intercept %.3f' % ransac.estimator_.intercept_)
+print()
+
+
+# Evaluating the performance of a linear regression model
+from sklearn.model_selection import train_test_split
+
+X = df.iloc[:, :-1].values
+y = df['MEDV'].values
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=0)
+
+slr = LinearRegression()
+slr.fit(X_train, y_train)
+y_train_pred = slr.predict(X_train)
+y_test_pred = slr.predict(X_test)
+
+plt.scatter(y_train_pred, y_train_pred - y_train, c='steelblue', marker='o', edgecolor='white',label='Training Data')
+plt.scatter(y_test_pred, y_test_pred - y_test, c='limegreen', marker='s', edgecolor='white', label='Test Data')
+
+plt.xlabel('Predicted values')
+plt.ylabel('Residuals')
+
+plt.legend(loc='upper left')
+plt.hlines(y=0, xmin=-10, xmax=50, color='black', lw=2)
+plt.xlim([-10, 50])
+plt.show()
+
+
+
+# Computing the MSE (mean standard error)
+from sklearn.metrics import mean_squared_error
+
+print()
+print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred),
+                                       mean_squared_error(y_test, t_test_pred))
+print()
