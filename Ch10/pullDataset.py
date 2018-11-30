@@ -154,7 +154,7 @@ plt.show()
 
 # Closed form solution without ML library
 # adding a column vector of 'ones'
-Xb = np.hstack((np.ones((X.shape[0], 1))m X))
+Xb = np.hstack((np.ones((X.shape[0], 1)), X))
 w = np.zeros(X.shape[1])
 z = np.linalg.inv(np.dot(Xb.T, Xb))
 w = np.dot(z, np.dot(Xb.T, y))
@@ -188,9 +188,9 @@ line_X = np.arange(3, 10, 1)
 line_y_ransac = ransac.predict(line_X[:, np.newaxis])
 
 plt.scatter(X[inlier_mask], y[inlier_mask], c='steelblue', edgecolor='white',
-            marker='o', laberl='Inliers')
+            marker='o', label='Inliers')
 
-plt.scatter(X[outlier_masl], y[outlier_mask], c='limegreen', edgecolor='white',
+plt.scatter(X[outlier_mask], y[outlier_mask], c='limegreen', edgecolor='white',
             marker='s', label='Outliers')
 
 plt.plot(line_X, line_y_ransac, color='black', lw=2)
@@ -237,7 +237,7 @@ from sklearn.metrics import mean_squared_error
 
 print()
 print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred),
-                                       mean_squared_error(y_test, t_test_pred))
+                                       mean_squared_error(y_test, y_test_pred)))
 print()
 
 
@@ -245,7 +245,7 @@ print()
 from sklearn.metrics import r2_score
 
 print()
-print('R^2 trian: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred),
+print('R^2 train: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred),
                                        r2_score(y_test, y_test_pred)))
 print()
 
@@ -270,5 +270,49 @@ elanet = ElasticNet(alpha=1.0, l1_ratio=0.5)
 
 
 
+# Modeling nonlinear relationships in the Housing dataset
+# between LSTAT and housing prices
+from sklearn.preprocessing import PolynomialFeatures
+
+X = df[['LSTAT']].values
+y = df['MEDV'].values
+
+regr = LinearRegression()
+
+# create quadratic features 
+quadratic = PolynomialFeatures(degree=2)
+cubic = PolynomialFeatures(degree=3)
+X_quad = quadratic.fit_transform(X)
+X_cubic = cubic.fit_transform(X)
+
+# fit features
+X_fit = np.arange(X.min(), X.max(), 1)[:, np.newaxis]
+
+regr = regr.fit(X, y)
+y_lin_fit = regr.predict(X_fit)
+linear_r2 = r2_score(y, regr.predict(X))
+
+regr = regr.fit(X_quad, y)
+y_quad_fit = regr.predict(quadratic.fit_transform(X_fit))
+quadratic_r2 = r2_score(y, regr.predict(X_quad))
+
+regr = regr.fit(X_cubic, y)
+y_cubic_fit = regr.predict(cubic.fit_transform(X_fit))
+cubic_r2 = r2_score(y, regr.predict(X_cubic))
+
+plt.scatter(X, y, label='training points', color='lightgray')
+
+plt.plot(X_fit, y_lin_fit, label='linear (d=1), $R^2=%.2f$' % linear_r2,
+         color='blue', lw=2, linestyle=':')
+
+plt.plot(X_fit, y_quad_fit, label='quadratic (d=2), $R^2=%.2f$' % quadratic_r2,
+         color='red', lw=2, linestyle='-')
+
+plt.plot(X_fit, y_cubic_fit, label='cubic (d=3), $R^2=%.2f$' % linear_r2,
+         color='green', lw=2, linestyle='--')
 
 
+plt.xlabel('LSTAT : ' + col_2_desc['LSTAT'])
+plt.ylabel('MEDV : ' + col_2_desc['MEDV'])
+plt.legend(loc='upper right')
+plt.show()
