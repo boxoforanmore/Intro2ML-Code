@@ -316,3 +316,96 @@ plt.xlabel('LSTAT : ' + col_2_desc['LSTAT'])
 plt.ylabel('MEDV : ' + col_2_desc['MEDV'])
 plt.legend(loc='upper right')
 plt.show()
+
+
+
+# Testing to see if a logistic expression of a function with a negative right side may work better 
+# (ie a decreasing exponential function)
+X_log = np.log(X)
+y_sqrt = np.sqrt(y)
+
+
+# fit the features
+X_fit = np.arange(X_log.min()-1, X_log.max()+1, 1)[:, np.newaxis]
+regr = regr.fit(X_log, y_sqrt)
+y_lin_fit = regr.predict(X_fit)
+linear_r2 = r2_score(y_sqrt, regr.predict(X_log))
+
+
+plt.scatter(X_log, y_sqrt, label='training points', color='lightgray')
+plt.plot(X_fit, y_lin_fit, label='linear (d=1), $R^2=%.2f$' % linear_r2,
+         color='blue', lw=2, linestyle='--')
+
+plt.xlabel('log(% lower status of the population [LSTAT])')
+plt.ylabel('$\sqrt{Price \; in \; \$1000s \; [MEDV]}$')
+plt.legend(loc='lower left')
+plt.show()
+
+
+# Print r2 logistic transformation:
+print()
+print('Logistic Transformation R^2=%.2f' % linear_r2)
+print()
+
+
+
+# Decision Tree Regression
+from sklearn.tree import DecisionTreeRegressor
+
+X = df[['LSTAT']].values
+y = df['MEDV'].values
+tree = DecisionTreeRegressor(max_depth=3)
+tree.fit(X, y)
+
+sort_idx = X.flatten().argsort()
+lin_regplot(X[sort_idx], y[sort_idx], tree)
+
+plt.xlabel('% lower status of the population [LSTAT]')
+plt.ylabel('Price in $1000s [MEDV]')
+plt.show()
+
+
+
+# Random forest regression
+# 60% training set / 40% test set
+from sklearn.ensemble import RandomForestRegressor
+
+X = df.iloc[:, :-1].values
+y = df['MEDV'].values
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=1)
+
+forest = RandomForestRegressor(n_estimators=1000, criterion='mse', random_state=1, n_jobs=-1)
+forest.fit(X_train, y_train)
+
+y_train_pred = forest.predict(X_train)
+y_test_pred = forest.predict(X_test)
+
+print()
+print('MSE train: %.3f, test: %.3f' % (mean_squared_error(y_train, y_train_pred), \
+                                       mean_squared_error(y_test, y_test_pred)))
+print()
+print('R^2 train: %.3f, test: %.3f' % (r2_score(y_train, y_train_pred), \
+                                       r2_score(y_test, y_test_pred)))
+print()
+
+plt.scatter(y_train_pred, y_train_pred - y_train,
+            c='steelblue', edgecolor='white',
+            marker='o', 
+            s=35,
+            alpha=0.9,
+            label='Training data')
+
+plt.scatter(y_test_pred, y_test_pred - y_test,
+            c='limegreen', edgecolor='white',
+            marker = 's',
+            s=35,
+            alpha=0.9,
+            label='Test data')
+
+plt.xlabel('Predicted values')
+plt.ylabel('Residuals')
+plt.legend(loc='upper left')
+plt.hlines(y=0, xmin=-10, xmax=50, lw=2, color='black')
+plt.lim([-10, 50])
+plt.show()
