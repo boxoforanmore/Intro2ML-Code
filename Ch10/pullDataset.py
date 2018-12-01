@@ -375,7 +375,8 @@ y = df['MEDV'].values
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, random_state=1)
 
-forest = RandomForestRegressor(n_estimators=1000, criterion='mse', random_state=1, n_jobs=-1)
+# >=1000 estimators overfits
+forest = RandomForestRegressor(n_estimators=10000, criterion='mse', random_state=1, n_jobs=-1)
 forest.fit(X_train, y_train)
 
 y_train_pred = forest.predict(X_train)
@@ -407,5 +408,5 @@ plt.xlabel('Predicted values')
 plt.ylabel('Residuals')
 plt.legend(loc='upper left')
 plt.hlines(y=0, xmin=-10, xmax=50, lw=2, color='black')
-plt.lim([-10, 50])
+plt.xlim([-10, 50])
 plt.show()
