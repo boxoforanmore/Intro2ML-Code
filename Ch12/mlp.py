@@ -71,3 +71,33 @@ ax[0].set_xticks([])
 ax[0].set_yticks([])
 plt.tight_layout()
 plt.show()
+
+
+# Plot multiple examples of the same digit to see variance
+fig, ax = plt.subplots(nrows=5, ncols=5, sharex=True, sharey=True)
+
+ax = ax.flatten()
+
+for i in range(25):
+    img = X_train[y_train == 7][i].reshape(28, 28)
+    ax[i].imshow(img, cmap='Greys')
+
+ax[0].set_xticks([])
+ax[0].set_yticks([])
+plt.tight_layout()
+plt.show()
+
+
+# Now with 2s
+fig, ax = plt.subplots(nrows=5, ncols=5, sharex=True, sharey=True)
+
+ax = ax.flatten()
+
+for i in range(25):
+    img = X_train[y_train == 2][i].reshape(28, 28) 
+    ax[i].imshow(img, cmap='Greys')
+
+ax[0].set_xticks([])
+ax[0].set_yticks([])
+plt.tight_layout()
+plt.show()
