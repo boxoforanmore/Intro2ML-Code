@@ -23,6 +23,11 @@ def load_mnist(path, kind='train'):
     images_path = os.path.join(path, '%s-images-idx3-ubyte' % kind)
 
     with open(labels_path, 'rb') as lbpath:
+        # magic number = description of file protocol 
+        # n = number of items form the file buffer
+        # >II =>
+        #     '>' big endian
+        #     'I' unsigned integer
         magic, n = struct.unpack('>II', lbpath.read(8))
         labels = np.fromfile(lbpath, dtype=np.uint8)
 
@@ -30,8 +35,23 @@ def load_mnist(path, kind='train'):
         magix, num, rows, cols = struct.unpack(">IIII", imgpath.read(16))
         images = np.fromfile(imgpath, dtype=np.uint8).reshape(len(labels), 784)
 
+        # Normalize pixel values from MNIST to range of -1 to 1 (fairly common)
+        # Can also use other feature scaling, through this tends to work fine
+        # Batch normalization is also common and very effective
         images = ((images / 255.) - 0.5) * 2
 
     return images, labels
+
+
+
+# Load 60,000 training instances and 10,000 test samples
+X_train, y_train = load_mnist('', kind='train')
+print()
+print('Rows: %d, columns: %d' % (X_train.shape[0], X_train.shape[1]))
+
+X_test, y_test = load_mnist('', kind='t10k')
+print()
+print('Rows: %d, columns: %d' % (X_test.shape[0], X_test.shape[1]))
+print()
 
 
