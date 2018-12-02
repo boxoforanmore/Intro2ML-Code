@@ -101,3 +101,16 @@ ax[0].set_xticks([])
 ax[0].set_yticks([])
 plt.tight_layout()
 plt.show()
+
+
+# Save scaled images into easy to load format for python
+# Instead of pickle, use numpy's savez since they are np arrays
+
+np.savez_compressed('mnist_scaled.npz', X_train=X_train, y_train=y_train,
+                                        X_test=X_test, y_test=y_test)
+
+# Load in the data
+mnist = np.load('mnist_scaled.npz')
+
+# Show that the data has been loaded
+print(mnist.files)
