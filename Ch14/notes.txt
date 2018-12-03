@@ -1,0 +1,36 @@
+TensorFlow ranks and tensors
+- Tensors are a generalizable mathematical notation for multidimensional arrays holding data values
+
+- The dimensionality of a tensor is its rank
+    --> a scalar is of rank 0
+    --> a vector is of rank 1
+    --> a matrix is of rank 2
+    --> etc (into higher dimensions)
+
+- Higher ranks can be used to help image classification with multiple image channels (for example)
+
+- We can use `tf.rank` to obtain the tensor as an output
+    --> Can also retrieve its shape with X.get_shape()
+        --> Returns TensorShape as an output
+
+- Steps for building and compiling a computation graph (ie for computing gradients)
+  1) Instantiate a new, empty computation graph
+  2) Add nodes (tensors and operations) to the computation graph
+  3) Execute the graph:
+     a) Start a new session
+     b) Initialize the variables in the graph
+     c) Run the computation graph in this session
+
+- A TF session is an envoronment in which the operations and tensors of a graph can be executed
+    --> tf.Session() can be called with a graph, or a default graph (which may be empty)
+    --> After launching a tf session, we can execute its nodes (evaluate its tensors or executing its operators)
+    --> Evaluating each individual tensor involves calling its eval method inside the current session
+    --> To evaluate a node, tf must evaluate all preceding nodes until it reaches that node
+        --> If there are placeholders, they must be fed
+
+- We can use a session's run method to execute operations that do not have any return types (train_op in Ch13)
+
+- We can also run both tensors and operators with tf.Session().run()
+    --> Multiple tensors and operators can be placed in a list or tuple (will return list or tuple of same size)
+
+- 
